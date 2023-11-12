@@ -2,7 +2,9 @@ package draylar.leafdecay.mixin;
 
 import draylar.leafdecay.scheduler.FutureBlockBreak;
 import draylar.leafdecay.scheduler.LeafBreakHandler;
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.LeavesBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
@@ -15,12 +17,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Block.class)
 public class LogBreakMixin {
 
-    @Inject(
-            method = "onBreak",
-            at = @At("TAIL")
-    )
+    @Inject(method = "onBreak", at = @At("TAIL"))
     private void afterBreak(World world, BlockPos pos, BlockState state, PlayerEntity player, CallbackInfo info) {
-        if (!world.isClient && (state.getBlock() instanceof PillarBlock) && state.getMaterial().equals(Material.WOOD)) {
+        if (!world.isClient
+                && state.getBlock().getName().getString().endsWith("Log")
+//                && (state.getBlock() instanceof PillarBlock) && state.getMaterial().equals(Material.WOOD)
+        ) {
             BlockPos upPosition = pos.up();
             BlockState upState = world.getBlockState(upPosition);
 
